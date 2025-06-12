@@ -1,11 +1,19 @@
 import asyncio
 from logging.config import fileConfig
 
+import sys
+import os
+
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+)
+
 from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+from app.infrastructure.persistence_sqla.mappings.all import map_tables
 from app.infrastructure.persistence_sqla.registry import mapping_registry
 from app.setup.config.settings import AppSettings, load_settings
 
@@ -22,6 +30,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
+map_tables()
 target_metadata = mapping_registry.metadata
 
 # other values from the config, defined by the needs of env.py,
